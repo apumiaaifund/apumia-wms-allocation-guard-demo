@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>АПУМИЯ Баланс Запасов и Заказов 1С — AMES v2.0</title><style>
+<title>АПУМИЯ Баланс Складских Запасов и Заказов — AMES v2.0</title><style>
 body{background:#f8fafc;color:#0f172a;font-family:system-ui,-apple-system,sans-serif;padding:24px;max-width:920px;margin:auto}
 .card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:22px;margin-bottom:16px}
 button{background:#fff;border:1px solid #cbd5e1;padding:7px 12px;border-radius:8px;cursor:pointer;margin:3px}
@@ -8,7 +8,7 @@ textarea{width:100%;height:150px;background:#f1f5f9;border:1px solid #cbd5e1;bor
 .PASS{color:#059669}.ALERT_PASS{color:#d97706}.BLOCK{color:#dc2626}
 </style></head><body>
 <div style="display:flex;justify-content:space-between;margin-bottom:16px;font-size:13px"><strong>🛡 AMES v2.0 • Суверенный контур РФ (Без интернета)</strong><a href="https://apumiaaifund.github.io/">← Реестр решений ↗</a></div>
-<div class="card"><h2>АПУМИЯ Баланс Запасов и Заказов 1С</h2><p style="color:#64748b;font-size:14px;margin:6px 0 14px">Математический контроль автозаказа и распределения остатков по складам с защитой от заморозки капитала.</p>
+<div class="card"><h2>АПУМИЯ Баланс Складских Запасов и Заказов</h2><p style="color:#64748b;font-size:14px;margin:6px 0 14px">Математический контроль автозаказа и распределения остатков по складам с защитой от заморозки капитала.</p>
 <div>Режим работы: <button id="m1" onclick="sm('SHADOW_AUDIT')">Аудит (без блока)</button><button id="m2" onclick="sm('ENFORCE_SOFT')">Мягкий блок</button><button id="m3" class="act" onclick="sm('FAIL_CLOSED')">Жёсткий блок</button></div>
 <div style="margin-top:8px">Примеры документов: <button onclick="lp(0)">✅ Корректная операция</button><button onclick="lp(1)">⛔ Нарушение лимита</button></div>
 <textarea id="in"></textarea><button class="run" onclick="ev()">Проверить инварианты</button></div>
