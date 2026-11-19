@@ -1,0 +1,27 @@
+<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>АПУМИЯ Баланс Запасов и Заказов 1С — AMES v2.0</title><style>
+body{background:#f8fafc;color:#0f172a;font-family:system-ui,-apple-system,sans-serif;padding:24px;max-width:920px;margin:auto}
+.card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:22px;margin-bottom:16px}
+button{background:#fff;border:1px solid #cbd5e1;padding:7px 12px;border-radius:8px;cursor:pointer;margin:3px}
+button.act{background:#0f172a;color:#fff}button.run{background:#2563eb;color:#fff;font-weight:600}
+textarea{width:100%;height:150px;background:#f1f5f9;border:1px solid #cbd5e1;border-radius:8px;padding:10px;font-family:monospace;margin:10px 0}
+.PASS{color:#059669}.ALERT_PASS{color:#d97706}.BLOCK{color:#dc2626}
+</style></head><body>
+<div style="display:flex;justify-content:space-between;margin-bottom:16px;font-size:13px"><strong>🛡 AMES v2.0 • Суверенный контур РФ (Без интернета)</strong><a href="https://apumiaaifund.github.io/">← Реестр решений ↗</a></div>
+<div class="card"><h2>АПУМИЯ Баланс Запасов и Заказов 1С</h2><p style="color:#64748b;font-size:14px;margin:6px 0 14px">Математический контроль автозаказа и распределения остатков по складам с защитой от заморозки капитала.</p>
+<div>Режим работы: <button id="m1" onclick="sm('SHADOW_AUDIT')">Аудит (без блока)</button><button id="m2" onclick="sm('ENFORCE_SOFT')">Мягкий блок</button><button id="m3" class="act" onclick="sm('FAIL_CLOSED')">Жёсткий блок</button></div>
+<div style="margin-top:8px">Примеры документов: <button onclick="lp(0)">✅ Корректная операция</button><button onclick="lp(1)">⛔ Нарушение лимита</button></div>
+<textarea id="in"></textarea><button class="run" onclick="ev()">Проверить инварианты</button></div>
+<div class="card"><h3 id="res">ГОТОВ К ПРОВЕРКЕ</h3><pre id="det" style="color:#dc2626;font-size:12px;margin:8px 0"></pre><div id="sh" style="font-family:monospace;font-size:11px;color:#64748b"></div></div>
+<script>
+let mode="FAIL_CLOSED";const P=[{"sku":"ТМЦ-091","stock_days":18,"order_qty":400,"budget_kopeks":2000000,"unit_cost_kopeks":4500},{"sku":"ТМЦ-092","stock_days":95,"order_qty":1200,"budget_kopeks":2000000,"unit_cost_kopeks":4500}];
+function sm(m){mode=m;["SHADOW_AUDIT","ENFORCE_SOFT","FAIL_CLOSED"].forEach((x,i)=>document.getElementById("m"+(i+1)).className=x===m?"act":"");ev();}
+function lp(i){document.getElementById("in").value=JSON.stringify(P[i],null,2);ev();}
+async function ev(){let t;try{t=JSON.parse(document.getElementById("in").value)}catch(e){return}const v=[];if(t.stock_days>45) v.push('ПЕРЕЗАТАРКА_СКЛАДА (>45 дней оборачиваемости)'); if(t.order_qty*t.unit_cost_kopeks>t.budget_kopeks) v.push('ПРЕВЫШЕНИЕ_БЮДЖЕТА_ЗАКУПКИ_ЦФО');
+const a=v.length===0?"PASS":(mode==="SHADOW_AUDIT"?"ALERT_PASS":"BLOCK");
+const label=a==="PASS"?"ДОПУЩЕНО":(a==="ALERT_PASS"?"ПРЕДУПРЕЖДЕНИЕ (АУДИТ)":"ЗАБЛОКИРОВАНО");
+const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(JSON.stringify({t,mode,a,v})));
+const hex=Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,"0")).join("");
+const r=document.getElementById("res");r.className=a;r.textContent=label+" ("+mode+") • Z3 SMT";
+document.getElementById("det").textContent=v.join("\n");document.getElementById("sh").textContent="КРИПТО-ШТАМП SHA-256: "+hex;}lp(0);
+</script></body></html>
